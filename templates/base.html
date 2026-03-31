@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}Alquiler de Películas{% endblock %}</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 0;
+                background: #f7f7f7;
+                color: #222;
+            }
+            header {
+                background: #111827;
+                color: #fff;
+                padding: 14px 18px;
+            }
+            nav a {
+                color: #e5e7eb;
+                text-decoration: none;
+                margin-right: 14px;
+            }
+            nav a:hover {
+                text-decoration: underline;
+            }
+            .container {
+                padding: 18px;
+                max-width: 980px;
+                margin: 0 auto;
+            }
+            .card {
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                padding: 14px;
+                margin-bottom: 14px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th,
+            td {
+                padding: 10px;
+                border-bottom: 1px solid #e5e7eb;
+                text-align: left;
+                vertical-align: top;
+            }
+            .row {
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            .row .card {
+                flex: 1 1 220px;
+                margin-bottom: 0;
+            }
+            .actions a,
+            .actions button {
+                margin-right: 8px;
+            }
+            .btn {
+                display: inline-block;
+                background: #2563eb;
+                color: #fff;
+                padding: 8px 12px;
+                border-radius: 6px;
+                border: none;
+                text-decoration: none;
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .btn.secondary {
+                background: #4b5563;
+            }
+            .btn.danger {
+                background: #dc2626;
+            }
+            input[type="date"],
+            input[type="number"],
+            input[type="text"],
+            input[type="email"],
+            select,
+            textarea {
+                padding: 8px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            label {
+                font-weight: bold;
+            }
+            .help {
+                color: #6b7280;
+                font-size: 13px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: center">
+                <div>
+                    <div style="font-weight: 700; font-size: 18px">Alquiler de Películas</div>
+                    <div style="font-size: 13px; opacity: 0.85">Versión didáctica para alumnos</div>
+                </div>
+                <nav>
+                    <a href="{% url 'index' %}">Inicio</a>
+                    <a href="{% url 'categoria_list' %}">Categorías</a>
+                    <a href="{% url 'pelicula_list' %}">Películas</a>
+                    <a href="{% url 'cliente_list' %}">Clientes</a>
+                    <a href="{% url 'alquiler_list' %}">Alquileres</a>
+                    <a href="{% url 'ventas_list' %}">Ventas</a>
+                </nav>
+            </div>
+        </header>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
+

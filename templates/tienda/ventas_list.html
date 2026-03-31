@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load soles %}
+
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap">
+            <h2 style="margin: 0">Ventas</h2>
+            <a class="btn secondary" href="{% url 'ventas_simular' %}">Simular ventas</a>
+        </div>
+
+        <div style="margin-top: 12px">
+                <p style="margin: 0 0 12px 0">
+                    <b>Ingresos totales:</b> {{ total_ingresos|soles }}
+                </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Película</th>
+                        <th>Categoría</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas %}
+                        <tr>
+                            <td>{{ venta.fecha_alquiler }}</td>
+                            <td>{{ venta.cliente.nombre }}</td>
+                            <td>{{ venta.pelicula.titulo }} ({{ venta.pelicula.anio }})</td>
+                            <td>{{ venta.pelicula.categoria.nombre }}</td>
+                            <td>{{ venta.precio|soles }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="help">Todavía no hay ventas.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load soles %}
+
+{% block title %}Inicio - Alquiler de Películas{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="card">
+            <div style="font-size: 14px; color: #6b7280">Películas</div>
+            <div style="font-size: 28px; font-weight: 700">{{ total_peliculas }}</div>
+        </div>
+        <div class="card">
+            <div style="font-size: 14px; color: #6b7280">Clientes</div>
+            <div style="font-size: 28px; font-weight: 700">{{ total_clientes }}</div>
+        </div>
+        <div class="card">
+            <div style="font-size: 14px; color: #6b7280">Alquileres pendientes</div>
+            <div style="font-size: 28px; font-weight: 700">{{ alquileres_pendientes }}</div>
+        </div>
+            <div class="card">
+            <div style="font-size: 14px; color: #6b7280">Ingresos (ventas)</div>
+                <div style="font-size: 28px; font-weight: 700">{{ ingresos|soles }}</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 style="margin-top: 0">Acciones rápidas</h2>
+        <div class="actions">
+            <a class="btn" href="{% url 'categoria_create' %}">Nueva categoría</a>
+            <a class="btn" href="{% url 'pelicula_create' %}" style="background: #16a34a">Nueva película</a>
+            <a class="btn" href="{% url 'cliente_create' %}" style="background: #8b5cf6">Nuevo cliente</a>
+            <a class="btn" href="{% url 'alquiler_create' %}" style="background: #f59e0b">Nuevo alquiler</a>
+            <a class="btn secondary" href="{% url 'ventas_simular' %}">Simular ventas</a>
+        </div>
+        <p class="help" style="margin-bottom: 0">
+            En esta versión, una “venta” es un <b>alquiler marcado como pagado</b>.
+        </p>
+    </div>
+{% endblock %}
+

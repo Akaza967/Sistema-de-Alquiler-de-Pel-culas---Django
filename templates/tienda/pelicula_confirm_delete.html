@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Borrar película{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h2 style="margin-top: 0">Borrar película</h2>
+        <p>¿Seguro que quieres borrar <b>{{ object }}</b>?</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn danger" type="submit">Borrar</button>
+            <a class="btn secondary" href="{% url 'pelicula_list' %}" style="margin-left: 8px">Cancelar</a>
+        </form>
+    </div>
+{% endblock %}
+
