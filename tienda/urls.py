@@ -30,5 +30,7 @@ urlpatterns = [
     # Ventas (en esta versión: alquileres pagados)
     path("ventas/", views.VentasListView.as_view(), name="ventas_list"),
     path("ventas/simular/", views.simular_ventas, name="ventas_simular"),
+    path("pareto/", views.pareto_categorias, name="pareto"),
+    path("api/ventas/", views.api_ventas, name="api_ventas"),
 ]
 

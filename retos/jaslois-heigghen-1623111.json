@@ -1,0 +1,70 @@
+{
+  "alumno": "JASLOIS-HEIGGHEN",
+  "codigo": "1623111",
+  "token_entrega": "C40625A54628",
+  "generado_en_utc": "2026-04-04T22:14:28.074769+00:00",
+  "reglas_entrega": {
+    "rama_git_obligatoria": "alumno/jaslois-heigghen-c406",
+    "nombre_archivo_reflexion": "REFLEXION_C40625A54628.md",
+    "incluir_token_en_readme": true,
+    "incluir_token_en_commit_final": true
+  },
+  "parametros_unicos": {
+    "stock_minimo_pelicula": 4,
+    "mora_por_dia_soles": 1,
+    "limite_alquileres_pendientes": 4,
+    "dias_maximo_retraso": 7,
+    "prefijo_slug_obligatorio": "jasloi-98"
+  },
+  "retos_asignados": [
+    {
+      "id": 1,
+      "titulo": "Reto Django #1"
+    },
+    {
+      "id": 12,
+      "titulo": "Reto Django #12"
+    },
+    {
+      "id": 13,
+      "titulo": "Reto Django #13"
+    },
+    {
+      "id": 23,
+      "titulo": "Reto Django #23"
+    },
+    {
+      "id": 52,
+      "titulo": "Reto Django #52"
+    },
+    {
+      "id": 55,
+      "titulo": "Reto Django #55"
+    },
+    {
+      "id": 63,
+      "titulo": "Reto Django #63"
+    },
+    {
+      "id": 69,
+      "titulo": "Reto Django #69"
+    },
+    {
+      "id": 79,
+      "titulo": "Reto Django #79"
+    },
+    {
+      "id": 81,
+      "titulo": "Reto Django #81"
+    },
+    {
+      "id": 93,
+      "titulo": "Reto Django #93"
+    },
+    {
+      "id": 97,
+      "titulo": "Reto Django #97"
+    }
+  ],
+  "instruccion_docente": "Pide al alumno que implemente solo estos retos. Si otro repo tiene token o parámetros distintos, se considera copia."
+}

@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-import datetime
-
+from datetime import date
 from django import forms
-
 from .models import Alquiler, Categoria, Cliente, Pelicula
-
+from django.core.exceptions import ValidationError
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -40,23 +38,39 @@ class MarcarPagadoForm(forms.Form):
 
 
 class SimularVentasForm(forms.Form):
-    numero_ventas = forms.IntegerField(min_value=1, max_value=200, label="Cantidad de ventas a simular")
-    desde = forms.DateField(required=False, label="Desde (opcional)", widget=forms.DateInput(attrs={"type": "date"}))
-    hasta = forms.DateField(required=False, label="Hasta (opcional)", widget=forms.DateInput(attrs={"type": "date"}))
+    numero_ventas = forms.IntegerField(
+        min_value=1,
+        label="Número de ventas"
+    )
+
+    desde = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+    hasta = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
 
     def clean(self):
-        cleaned = super().clean()
-        desde = cleaned.get("desde")
-        hasta = cleaned.get("hasta")
+        cleaned_data = super().clean()
 
-        if desde and hasta and desde > hasta:
-            raise forms.ValidationError("La fecha 'Desde' no puede ser posterior a 'Hasta'.")
+        desde = cleaned_data.get("desde")
+        hasta = cleaned_data.get("hasta")
+        numero = cleaned_data.get("numero_ventas")
 
-        # Si no se manda rango, usaremos la fecha de hoy.
-        if not desde and not hasta:
-            today = datetime.date.today()
-            cleaned["desde"] = today
-            cleaned["hasta"] = today
+        # 🔴 Validación 1: fechas correctas
+        if desde and hasta:
+            if hasta < desde:
+                raise ValidationError(
+                    "La fecha 'hasta' no puede ser menor que 'desde'."
+                )
 
-        return cleaned
+        # 🔴 Validación 2: límite razonable
+        if numero and numero > 1000:
+            raise ValidationError(
+                "No puedes generar más de 1000 ventas."
+            )
+
+        # 🔴 Validación 3: no fechas futuras
+        if desde and desde > date.today():
+            raise ValidationError(
+                "La fecha 'desde' no puede estar en el futuro."
+            )
+
+        return cleaned_data
 

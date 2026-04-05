@@ -24,6 +24,9 @@ class PeliculaAdmin(admin.ModelAdmin):
 
 @admin.register(Alquiler)
 class AlquilerAdmin(admin.ModelAdmin):
-    list_display = ["fecha_alquiler", "cliente", "pelicula", "pagado", "precio", "fecha_devolucion"]
-    list_filter = ["pagado", "fecha_alquiler", "fecha_devolucion"]
-    search_fields = ["cliente__nombre", "pelicula__titulo"]
+    list_display = ("cliente", "pelicula", "fecha_alquiler", "pagado", "precio_pelicula")
+
+    def precio_pelicula(self, obj):
+        return obj.pelicula.precio_alquiler
+
+    precio_pelicula.short_description = "Precio"
