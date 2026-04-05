@@ -462,3 +462,40 @@ Rúbrica simple (10 puntos):
 ## 15. Licencia y uso educativo
 
 Proyecto pensado para **uso educativo**. Si se publica, conviene aclarar versión de Python/Django y si `db.sqlite3` se ignora en Git (lo habitual).
+
+# Entrega Proyecto
+Alumno: JASLOIS HEIGGHEN
+Código: 1623111
+Token: C40625A54628
+
+# 🎬 Sistema de Alquiler de Películas - Django
+
+## 📌 Descripción
+Sistema desarrollado en Django que permite gestionar películas, clientes y alquileres, aplicando buenas prácticas de desarrollo backend.
+
+## 🚀 Funcionalidades
+- CRUD de películas y categorías
+- Gestión de alquileres
+- Control de stock automático (signals)
+- Validaciones avanzadas en modelos y formularios
+- API en formato JSON
+- Análisis de ingresos (Pareto)
+- Optimización de consultas (select_related, annotate)
+
+## 🧠 Retos implementados
+- Reto #1: Campo stock en Pelicula
+- Reto #12: select_related
+- Reto #13: prefetch_related
+- Reto #23: annotate + Sum
+- Reto #52: Pareto
+- Reto #55: reportes agregados
+- Reto #63: control de permisos
+- Reto #69: signals
+- Reto #79: validaciones cruzadas
+- Reto #81: validaciones en forms
+- Reto #93: API JSON
+- Reto #97: tests automatizados
+
+## 🧪 Tests
+```bash
+python manage.py test

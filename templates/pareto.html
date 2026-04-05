@@ -1,0 +1,19 @@
+<h2>Diagrama de Pareto - Categorías</h2>
+
+<table border="1">
+    <tr>
+        <th>Categoría</th>
+        <th>Ingresos</th>
+        <th>%</th>
+        <th>% acumulado</th>
+    </tr>
+
+    {% for item in datos %}
+    <tr>
+        <td>{{ item.categoria }}</td>
+        <td>{{ item.total }}</td>
+        <td>{{ item.porcentaje }}%</td>
+        <td>{{ item.acumulado }}%</td>
+    </tr>
+    {% endfor %}
+</table>

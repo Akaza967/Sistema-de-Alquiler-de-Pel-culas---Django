@@ -1,17 +1,18 @@
 import datetime
 import random
 
-from django.db.models import Sum
-from django.http import HttpRequest, HttpResponse
+from django.db.models import Sum, Count
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.contrib.auth.decorators import user_passes_test
+from django.db.models.functions import Coalesce
 
 from .forms import AlquilerCreateForm, MarcarPagadoForm, SimularVentasForm
 from .models import Alquiler, Categoria, Cliente, Pelicula
-
 
 def index(request: HttpRequest) -> HttpResponse:
     total_peliculas = Pelicula.objects.count()
@@ -163,17 +164,36 @@ class VentasListView(ListView):
 
     def get_queryset(self):
         return (
-            Alquiler.objects.filter(pagado=True)
-            .select_related("cliente", "pelicula", "pelicula__categoria")
-            .order_by("-fecha_alquiler")
-        )
+        Alquiler.objects.filter(pagado=True)
+        .select_related("cliente", "pelicula", "pelicula__categoria")  # ✅ optimizado
+        .order_by("-fecha_alquiler")
+    )
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["total_ingresos"] = self.get_queryset().aggregate(total=Sum("precio")).get("total") or 0
-        return ctx
+   # Reto Django #12
+def get_context_data(self, **kwargs):
+    ctx = super().get_context_data(**kwargs)
 
+    # Total general (ya lo tenías)
+    ctx["total_ingresos"] = (
+        self.get_queryset().aggregate(total=Sum("precio")).get("total") or 0
+    )
 
+    # 🔥 NUEVO: ingresos por categoría
+    ctx["ingresos_por_categoria"] = (
+        Categoria.objects
+        .values("nombre")
+        .annotate(total=Sum("pelicula__alquiler__precio"))
+        .order_by("-total")
+    )
+
+    return ctx
+
+# Reto Django #63
+def es_supervisor(user):
+    return user.groups.filter(name="supervisor").exists()
+
+# Reto Django #63
+@user_passes_test(es_supervisor)
 def simular_ventas(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = SimularVentasForm(request.POST)
@@ -226,3 +246,64 @@ def simular_ventas(request: HttpRequest) -> HttpResponse:
 
     return render(request, "tienda/simular_ventas.html", {"form": form})
 
+def clientes_sin_alquileres(request: HttpRequest) -> HttpResponse:
+    clientes = (
+        Cliente.objects
+        .prefetch_related("alquiler")  # 🔥 optimización
+        .annotate(total_alquileres=Count("alquiler"))
+        .filter(total_alquileres=0)
+)
+
+    return render(
+        request,
+        "tienda/clientes_sin_alquiler.html",
+        {"clientes": clientes}
+    )
+
+def pareto_categorias(request):
+    datos = (
+        Categoria.objects
+        .prefetch_related("peliculas__alquiler")  # 🔥 optimización
+        .annotate(
+            total=Coalesce(Sum("pelicula__alquiler__precio"), 0)
+    )
+    .order_by("-total")
+)
+
+    # 🔥 total general
+    total_general = sum(d.total for d in datos)
+
+    acumulado = 0
+    resultado = []
+
+    for d in datos:
+        porcentaje = (d.total / total_general * 100) if total_general > 0 else 0
+        acumulado += porcentaje
+
+        resultado.append({
+            "categoria": d.nombre,
+            "total": d.total,
+            "porcentaje": round(porcentaje, 2),
+            "acumulado": round(acumulado, 2),
+        })
+
+    return render(request, "tienda/pareto.html", {
+        "datos": resultado
+    })
+
+def api_ventas(request):
+    ventas = Alquiler.objects.filter(pagado=True).select_related(
+        "cliente", "pelicula"
+    )
+
+    data = []
+
+    for v in ventas:
+        data.append({
+            "cliente": str(v.cliente),
+            "pelicula": str(v.pelicula),
+            "fecha": v.fecha_alquiler,
+            "precio": float(v.precio),
+        })
+
+    return JsonResponse(data, safe=False)
